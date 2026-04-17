@@ -1,0 +1,330 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+    --bg-dark: #010103;
+    --bg-surface: rgba(8, 8, 15, 0.7);
+    --accent-primary: #00f2ff;
+    --accent-secondary: #7d00ff;
+    --accent-tri: #ff007d;
+    --text-main: #f0f0f5;
+    --text-muted: #9494a1;
+    --success: #00ff9d;
+    --danger: #ff0051;
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --neon-shadow: 0 0 20px rgba(0, 242, 255, 0.25);
+    --glow: 0 0 15px currentColor;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; cursor: crosshair; }
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Outfit', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    perspective: 1200px; /* For 3D Tilt */
+}
+
+/* Kinetic Background */
+.aether-bg {
+    position: fixed;
+    top: -5%; left: -5%; width: 110%; height: 110%;
+    background: 
+        radial-gradient(circle at 15% 15%, rgba(125, 0, 255, 0.05), transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(255, 0, 125, 0.05), transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.02), transparent 60%);
+    z-index: -1;
+    filter: blur(60px);
+    transition: transform 0.8s cubic-bezier(0.075, 0.82, 0.165, 1); /* Smoother motion */
+}
+
+#zenith-app {
+    display: grid;
+    grid-template-columns: 320px 1fr 320px;
+    grid-template-rows: 60px 1fr; /* Fixed compact header */
+    gap: 25px; /* Increased gap to prevent overlap */
+    padding: 20px;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Ghost HUD Header */
+.sensory-hud {
+    grid-column: 1 / -1;
+    background: var(--bg-surface);
+    backdrop-filter: blur(40px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.ghost-time {
+    font-family: 'JetBrains Mono';
+    font-weight: 700;
+    color: var(--accent-primary);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+.hud-label { display: none; } /* Simplified */
+
+.pulse-grid {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.radar-scan {
+    position: absolute;
+    top: 0; left: -100%; width: 200%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.05), transparent);
+    animation: radar-sweep 8s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes radar-sweep {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(50%); }
+}
+
+.hud-label {
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+}
+
+.pulse-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: flex-start;
+    padding: 10px 0;
+}
+
+.pulse-node {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.pulse-node:hover { transform: scale(1.5); }
+
+.pulse-node::after {
+    content: '';
+    position: absolute;
+    top: -4px; left: -4px; right: -4px; bottom: -4px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    animation: pulse-ring 2s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(3); opacity: 0; }
+}
+
+.pulse-node.stable { background: var(--success); color: var(--success); }
+.pulse-node.active { background: var(--accent-primary); color: var(--accent-primary); }
+.pulse-node.dirty { background: #ffaa00; color: #ffaa00; }
+.pulse-node.critical { background: var(--danger); color: var(--danger); }
+
+/* Navigation & Search */
+.controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.search-belt {
+    flex: 1;
+    max-width: 600px;
+    position: relative;
+}
+
+/* Sidebar & Search Widget */
+.search-widget {
+    padding: 0 !important;
+    overflow: hidden;
+    border-radius: 30px !important;
+}
+
+#universal-search {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 12px 45px;
+    color: #fff;
+    font-family: 'JetBrains Mono';
+    font-size: 0.75rem;
+    outline: none;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: rgba(8, 8, 15, 0.95);
+    backdrop-filter: blur(60px);
+    border: 1px solid var(--glass-border);
+    z-index: 9999;
+}
+
+.search-item {
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-item:hover {
+    background: rgba(0, 242, 255, 0.08);
+}
+
+/* Sidebar & Widgets */
+.sidebar { display: flex; flex-direction: column; gap: 15px; }
+
+.widget {
+    background: var(--bg-surface);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.widget-title {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+/* Orchestra Automations */
+.orch-btn {
+    width: 100%;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--glass-border);
+    color: #fff;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.orch-btn:hover {
+    background: var(--accent-secondary);
+    box-shadow: 0 0 20px rgba(125, 0, 255, 0.3);
+    transform: translateX(5px);
+}
+
+/* Project Cards 3D */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    overflow-y: auto;
+    padding-right: 15px; /* Space for aesthetic scrollbar */
+    transform-style: preserve-3d;
+    max-height: 100%;
+}
+
+.project-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style: preserve-3d;
+    will-change: transform;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.project-card:hover { 
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+}
+
+.project-meta {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.project-card:hover .project-meta {
+    max-height: 100px;
+    opacity: 1;
+    margin-top: 10px;
+}
+
+.launch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.btn-launch {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #fff;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-launch:hover {
+    background: var(--accent-primary);
+    color: #000;
+    box-shadow: var(--glow);
+}
+
+/* DNA Pulse */
+.dna-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.dna-fill {
+    position: absolute;
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0 0 10px currentColor;
+}
+
+/* Custom Scrollbar Ethereal */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: 10px; box-shadow: 0 0 10px var(--accent-primary); }

@@ -1,0 +1,19 @@
+# Node
+node_modules/
+.next/
+dist/
+build/
+out/
+.env*
+*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large/Temporary
+*.zip
+*.tar.gz
+*.db
+__pycache__/
+*.pyc

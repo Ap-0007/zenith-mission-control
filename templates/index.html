@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ZENITH // AETHER</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="aether-bg"></div>
+
+    <div id="zenith-app">
+        <!-- Ghost HUD Header -->
+        <div class="sensory-hud">
+            <div class="radar-scan"></div>
+            <div class="pulse-grid" id="pulse-grid">
+                <!-- Pulse nodes injected here -->
+            </div>
+            <div id="system-time" class="ghost-time">00:00:00</div>
+        </div>
+
+        <!-- Sidebar Left: Intelligence & Search -->
+        <div class="sidebar">
+            <div class="widget search-widget">
+                <div class="search-belt">
+                    <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--accent-primary); font-size: 0.8rem;"></i>
+                    <input type="text" id="universal-search" placeholder="GHOST SEARCH (Cmd+K)" autocomplete="off">
+                    <div id="search-results" class="search-results"></div>
+                </div>
+            </div>
+
+            <div class="widget">
+                <div class="widget-title">Workspace DNA</div>
+                <div id="dna-container"></div>
+                <div style="display:flex; justify-content:space-between; margin-top:15px; font-size:0.6rem; font-weight:800; color:var(--text-muted);">
+                    <span>PROJS // <span id="stat-projects" style="color:var(--accent-primary)">-</span></span>
+                    <span>DISK // <span id="stat-disk" style="color:var(--accent-tri)">-</span></span>
+                </div>
+            </div>
+
+            <div class="widget">
+                <div class="widget-title">System Pulse</div>
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex:1; text-align:center;">
+                        <div id="cpu-val" style="font-size: 1.2rem; font-weight: 800; color: var(--accent-primary)">0%</div>
+                        <div style="font-size: 0.5rem; opacity: 0.5;">CPU</div>
+                    </div>
+                    <div style="flex:1; text-align:center;">
+                        <div id="mem-val" style="font-size: 1.2rem; font-weight: 800; color: var(--accent-secondary)">0%</div>
+                        <div style="font-size: 0.5rem; opacity: 0.5;">MEM</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget" style="flex: 1; display: flex; flex-direction: column;">
+                <div class="widget-title">Orchestra Interface</div>
+                <div id="orch-progress-container" style="height: 2px; background: rgba(255,255,255,0.05); margin-bottom: 15px; display: none;">
+                    <div id="orch-progress-bar" style="height: 100%; width: 0%; background: var(--accent-primary); box-shadow: 0 0 10px var(--accent-primary); transition: width 0.3s;"></div>
+                </div>
+                <button class="orch-btn" id="btn-sync" onclick="runOrchestra('sync')">
+                    <span>Synchronize Empire</span>
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <button class="orch-btn" onclick="runOrchestra('cleanup')" style="border-color: var(--danger); color: var(--danger);">
+                    <span>Deep Housekeeping</span>
+                    <i class="fas fa-broom"></i>
+                </button>
+                <div id="orch-log" style="flex: 1; border: 1px solid var(--glass-border); border-radius: 8px; margin-top: 10px; padding: 10px; font-family: 'JetBrains Mono'; font-size: 0.6rem; color: #555; overflow-y: auto;">
+                    > AETHER Automations Ready.
+                </div>
+            </div>
+        </div>
+
+        <!-- Center: Project Grid -->
+        <div class="project-grid" id="project-list">
+            <!-- Project Cards with 3D Tilt -->
+        </div>
+
+        <!-- Sidebar Right: Analytics & Console -->
+        <div class="sidebar">
+            <div class="widget" style="flex: 1; overflow-y: auto;">
+                <div class="widget-title">Global Missions Feed</div>
+                <div id="todo-list" style="font-size: 0.75rem;"></div>
+            </div>
+
+            <div class="widget" style="background: rgba(0, 242, 255, 0.03); border-color: var(--accent-primary);">
+                <div class="widget-title" style="color: var(--accent-primary);">AI Insight</div>
+                <div id="ai-insight" style="font-size: 0.75rem; line-height: 1.6; opacity: 0.8;">
+                    Analyzing workspace... Ready to launch <strong>Antigravity</strong> deep-work protocols.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
